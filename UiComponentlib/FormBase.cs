@@ -361,12 +361,15 @@ namespace Rootech.UI.Component
                 g.DrawLine(borderPen, new Point(Width - 1, _titleBarBounds.Bottom), new Point(Width - 1, Height - 2));
                 g.DrawLine(borderPen, new Point(0, Height - 1), new Point(Width - 1, Height - 1));
             }
-            if (_iconImage != null)
+            if (Icon != null)
             {
-                g.DrawImage(_iconImage, _iconBounds);
+                int margin = 3;
+                int x = margin;
+                int y = margin;
+                int iconSz = TITLE_BAR_HEIGHT - margin * 2;
+                g.DrawImage(Icon.ToBitmap(), new Rectangle(x, y, iconSz, iconSz));
             }
             PaintTitle(g);
-
         }
 
         #region "Code related to draw form child controls"
@@ -450,7 +453,6 @@ namespace Rootech.UI.Component
 
             }
         }
-
         #endregion
 
         private void CheckButtonState(MouseEventArgs e, bool up = false)
