@@ -8,13 +8,13 @@ namespace UIComponentTest
     {
         public MainForm()
         {
-            Visualization = new ComponentVisualization();
-
+            Visualization = ComponentVisualization.Instance;
             InitializeComponent();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
         }
     }
 }

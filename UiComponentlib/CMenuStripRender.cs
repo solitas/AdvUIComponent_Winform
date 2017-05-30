@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Rootech.UI.Component
@@ -21,35 +17,36 @@ namespace Rootech.UI.Component
 
         public CMenuStripRender()
         {
-            ToolStripPanel panel = new ToolStripPanel();
-            panel.Margin = new Padding(0);
-            panel.Height = 0;
-            panel.Width = 0;
-            panel.RowMargin = new Padding(3);
-            InitializePanel(panel);
+            Visualization = ComponentVisualization.Instance;
         }
-
         #region "code related to rednering override method"
-
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
             var g = e.Graphics;
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
-
+            var itemRect = GetItemRect(e.Item);
             if (e.Item.IsOnDropDown)
             {
                 var itemRect = GetItemRect(e.Item);
                 var textRect = new Rectangle(24, itemRect.Y, itemRect.Width - (24 + 16), itemRect.Height);
-                g.DrawString(e.Text, Visualization.ROBOTO_REGULAR_9, e.Item.Enabled ? Visualization.GetPrimaryTextBrush() : Visualization.GetDisabledOrHintBrush(), textRect, new StringFormat() { LineAlignment = StringAlignment.Center });
+                var brush = e.Item.Enabled ? Visualization.GetPrimaryTextBrush() : Visualization.GetDisabledOrHintBrush();
+                g.DrawString(e.Text, Visualization.ROBOTO_REGULAR_9, brush, itemRect, new StringFormat()
+                {
+                    LineAlignment = StringAlignment.Center,
+                });
             }
             else
             {
-                Brush brush = e.Item.Pressed ? Visualization.GetPrimaryTextBrush() : Visualization.ColorScheme.LightPrimaryBrush;
-                Font font = e.Item.Pressed ? Visualization.ROBOTO_REGULAR_9 : Visualization.ROBOTO_MEDIUM_9;
-                g.DrawString(e.Text, font, brush, e.TextRectangle, new StringFormat() { LineAlignment = StringAlignment.Center });
+                var brush = e.Item.Pressed ? Visualization.GetPrimaryTextBrush() : Visualization.ColorScheme.LightPrimaryBrush;
+                var font = e.Item.Pressed ? Visualization.ROBOTO_REGULAR_9 : Visualization.ROBOTO_MEDIUM_9;
+                //g.DrawString(e.Text, font, brush, e.Item.ContentRectangle, new StringFormat() { LineAlignment = StringAlignment.Center });
+                g.DrawString(e.Text, font, brush, itemRect, new StringFormat()
+                {
+                    LineAlignment = StringAlignment.Center, 
+                    Alignment = StringAlignment.Center
+                });
             }
         }
-
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             var g = e.Graphics;
@@ -62,13 +59,11 @@ namespace Rootech.UI.Component
             }
 
         }
-
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
             var g = e.Graphics;
             //g.DrawRectangle(new Pen(ComponentVisualization.DIVIDERS_BLACK), new Rectangle(e.AffectedBounds.X, e.AffectedBounds.Y, e.AffectedBounds.Width - 1, e.AffectedBounds.Height - 1));
         }
-
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
             var g = e.Graphics;
@@ -95,7 +90,6 @@ namespace Rootech.UI.Component
             }
 
         }
-        #endregion
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             var g = e.Graphics;
@@ -123,14 +117,11 @@ namespace Rootech.UI.Component
                 }
             }
         }
+        #endregion
+
         private Rectangle GetItemRect(ToolStripItem item)
         {
             return new Rectangle(0, 0, item.ContentRectangle.Width + 4, item.ContentRectangle.Height + 4);
-        }
-        private Rectangle GetItemRectOnDrop(ToolStripItem item)
-        {
-            var cont = item.Container;
-            return new Rectangle(0, 0, item.ContentRectangle.Width + 4, item.ContentRectangle.Height + 6);
         }
     }
 }

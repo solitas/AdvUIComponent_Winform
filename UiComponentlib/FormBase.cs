@@ -137,7 +137,7 @@ namespace Rootech.UI.Component
         // constructor
         public FormBase()
         {
-            Visualization = new ComponentVisualization();
+            Visualization = ComponentVisualization.Instance;
 
             this.FormBorderStyle = FormBorderStyle.None;
             DoubleBuffered = true;
@@ -147,7 +147,7 @@ namespace Rootech.UI.Component
             // This enables the form to trigger the MouseMove event even when mouse is over another control
             Application.AddMessageFilter(new MouseMessageFilter());
             MouseMessageFilter.MouseMove += OnGlobalMouseMove;
-            MouseMessageFilter.MouseDown += OnGlobalMouseDown;
+            //MouseMessageFilter.MouseDown += OnGlobalMouseDown;
             var margin = this.DefaultMargin;
         }
 

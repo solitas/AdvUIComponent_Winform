@@ -28,182 +28,305 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Rootech.UI.Component.ComponentVisualization componentVisualization1 = new Rootech.UI.Component.ComponentVisualization();
             this.cMenuStrip1 = new Rootech.UI.Component.CMenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test11ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test12ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tEST2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test21ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test22ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test31ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test311ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test32ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.programGroupBuildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cToolStripMenuItem1 = new Rootech.UI.Component.CToolStripMenuItem();
+            this.cTabControl1 = new Rootech.UI.Component.CTabControl();
+            this.tabPage1 = new Rootech.UI.Component.CTabPage();
+            this.flatTabRenderer1 = new Rootech.UI.Component.FlatTabRenderer();
             this.cMenuStrip1.SuspendLayout();
+            this.cTabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cMenuStrip1
             // 
-            this.cMenuStrip1.AutoSize = false;
             this.cMenuStrip1.Depth = 0;
-            this.cMenuStrip1.GripMargin = new System.Windows.Forms.Padding(0);
             this.cMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.editToolStripMenuItem,
-            this.viewToolStripMenuItem,
-            this.buildToolStripMenuItem});
-            this.cMenuStrip1.Location = new System.Drawing.Point(30, 0);
+            this.tESTToolStripMenuItem,
+            this.tEST2ToolStripMenuItem,
+            this.test3ToolStripMenuItem,
+            this.buildToolStripMenuItem,
+            this.cToolStripMenuItem1});
+            this.cMenuStrip1.Location = new System.Drawing.Point(36, 0);
             this.cMenuStrip1.MouseButtonState = Rootech.UI.Component.MouseButtonState.HOVER;
             this.cMenuStrip1.Name = "cMenuStrip1";
             this.cMenuStrip1.Padding = new System.Windows.Forms.Padding(0);
-            this.cMenuStrip1.Size = new System.Drawing.Size(526, 24);
+            this.cMenuStrip1.Size = new System.Drawing.Size(263, 30);
             this.cMenuStrip1.Stretch = false;
             this.cMenuStrip1.TabIndex = 0;
             this.cMenuStrip1.Text = "cMenuStrip1";
-            this.cMenuStrip1.Visualization = componentVisualization1;
             // 
-            // fileToolStripMenuItem
+            // tESTToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.newToolStripMenuItem,
-            this.toolStripSeparator1,
+            this.tESTToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test11ToolStripMenuItem,
+            this.test12ToolStripMenuItem,
             this.saveToolStripMenuItem,
+            this.saveAllToolStripMenuItem,
+            this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.printToolStripMenuItem,
+            this.printPreviewToolStripMenuItem,
+            this.toolStripSeparator2,
             this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 24);
-            this.fileToolStripMenuItem.Text = "File";
+            this.tESTToolStripMenuItem.Name = "tESTToolStripMenuItem";
+            this.tESTToolStripMenuItem.Padding = new System.Windows.Forms.Padding(0);
+            this.tESTToolStripMenuItem.ShortcutKeyDisplayString = "F";
+            this.tESTToolStripMenuItem.Size = new System.Drawing.Size(29, 30);
+            this.tESTToolStripMenuItem.Text = "File";
             // 
-            // openToolStripMenuItem
+            // test11ToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.openToolStripMenuItem.Text = "New Program";
+            this.test11ToolStripMenuItem.Name = "test11ToolStripMenuItem";
+            this.test11ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.test11ToolStripMenuItem.Text = "New Program";
             // 
-            // newToolStripMenuItem
+            // test12ToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.newToolStripMenuItem.Text = "New Program Group";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(182, 6);
+            this.test12ToolStripMenuItem.Name = "test12ToolStripMenuItem";
+            this.test12ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.test12ToolStripMenuItem.Text = "New Group";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveToolStripMenuItem.Text = "Save ";
+            // 
+            // saveAllToolStripMenuItem
+            // 
+            this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveAllToolStripMenuItem.Text = "Save all";
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveAsToolStripMenuItem.Text = "Save as...";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.closeToolStripMenuItem.Text = "Close";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+            // 
+            // printToolStripMenuItem
+            // 
+            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.printToolStripMenuItem.Text = "Print";
+            // 
+            // printPreviewToolStripMenuItem
+            // 
+            this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.printPreviewToolStripMenuItem.Text = "Print Preview ";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
-            // editToolStripMenuItem
+            // tEST2ToolStripMenuItem
             // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.undoToolStripMenuItem,
-            this.redoToolStripMenuItem,
-            this.cutToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.copyToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 24);
-            this.editToolStripMenuItem.Text = "Edit";
+            this.tEST2ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test21ToolStripMenuItem,
+            this.test22ToolStripMenuItem});
+            this.tEST2ToolStripMenuItem.Name = "tEST2ToolStripMenuItem";
+            this.tEST2ToolStripMenuItem.Padding = new System.Windows.Forms.Padding(0);
+            this.tEST2ToolStripMenuItem.Size = new System.Drawing.Size(31, 30);
+            this.tEST2ToolStripMenuItem.Text = "Edit";
             // 
-            // undoToolStripMenuItem
+            // test21ToolStripMenuItem
             // 
-            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.undoToolStripMenuItem.Text = "Undo";
+            this.test21ToolStripMenuItem.Name = "test21ToolStripMenuItem";
+            this.test21ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.test21ToolStripMenuItem.Text = "Test2-1";
             // 
-            // redoToolStripMenuItem
+            // test22ToolStripMenuItem
             // 
-            this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.redoToolStripMenuItem.Text = "Redo";
+            this.test22ToolStripMenuItem.Name = "test22ToolStripMenuItem";
+            this.test22ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.test22ToolStripMenuItem.Text = "Test2-2";
             // 
-            // cutToolStripMenuItem
+            // test3ToolStripMenuItem
             // 
-            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.cutToolStripMenuItem.Text = "Cut";
+            this.test3ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test31ToolStripMenuItem,
+            this.test32ToolStripMenuItem});
+            this.test3ToolStripMenuItem.Name = "test3ToolStripMenuItem";
+            this.test3ToolStripMenuItem.Padding = new System.Windows.Forms.Padding(0);
+            this.test3ToolStripMenuItem.Size = new System.Drawing.Size(37, 30);
+            this.test3ToolStripMenuItem.Text = "View";
             // 
-            // pasteToolStripMenuItem
+            // test31ToolStripMenuItem
             // 
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.pasteToolStripMenuItem.Text = "Paste";
+            this.test31ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test311ToolStripMenuItem});
+            this.test31ToolStripMenuItem.Name = "test31ToolStripMenuItem";
+            this.test31ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.test31ToolStripMenuItem.Text = "Test3-1";
             // 
-            // copyToolStripMenuItem
+            // test311ToolStripMenuItem
             // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
+            this.test311ToolStripMenuItem.Name = "test311ToolStripMenuItem";
+            this.test311ToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.test311ToolStripMenuItem.Text = "Test3-1-1";
             // 
-            // viewToolStripMenuItem
+            // test32ToolStripMenuItem
             // 
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(45, 24);
-            this.viewToolStripMenuItem.Text = "View";
+            this.test32ToolStripMenuItem.Name = "test32ToolStripMenuItem";
+            this.test32ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.test32ToolStripMenuItem.Text = "Test3-2";
             // 
             // buildToolStripMenuItem
             // 
+            this.buildToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.compileToolStripMenuItem,
+            this.programGroupBuildToolStripMenuItem});
             this.buildToolStripMenuItem.Name = "buildToolStripMenuItem";
-            this.buildToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.buildToolStripMenuItem.Padding = new System.Windows.Forms.Padding(0);
+            this.buildToolStripMenuItem.Size = new System.Drawing.Size(38, 30);
             this.buildToolStripMenuItem.Text = "Build";
+            // 
+            // compileToolStripMenuItem
+            // 
+            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.compileToolStripMenuItem.Text = "Program Build";
+            // 
+            // programGroupBuildToolStripMenuItem
+            // 
+            this.programGroupBuildToolStripMenuItem.Name = "programGroupBuildToolStripMenuItem";
+            this.programGroupBuildToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.programGroupBuildToolStripMenuItem.Text = "Program Group Build";
+            // 
+            // cToolStripMenuItem1
+            // 
+            this.cToolStripMenuItem1.Depth = 0;
+            this.cToolStripMenuItem1.MouseButtonState = Rootech.UI.Component.MouseButtonState.HOVER;
+            this.cToolStripMenuItem1.Name = "cToolStripMenuItem1";
+            this.cToolStripMenuItem1.Padding = new System.Windows.Forms.Padding(0);
+            this.cToolStripMenuItem1.Size = new System.Drawing.Size(36, 30);
+            this.cToolStripMenuItem1.Text = "Help";
+            this.cToolStripMenuItem1.Visualization = null;
+            // 
+            // cTabControl1
+            // 
+            this.cTabControl1.ActiveColor = System.Drawing.SystemColors.Control;
+            this.cTabControl1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.cTabControl1.Controls.Add(this.tabPage1);
+            this.cTabControl1.Depth = 0;
+            this.cTabControl1.ImageIndex = -1;
+            this.cTabControl1.InactiveColor = System.Drawing.SystemColors.Window;
+            this.cTabControl1.InActiveForeColor = System.Drawing.SystemColors.ControlText;
+            this.cTabControl1.Location = new System.Drawing.Point(9, 44);
+            this.cTabControl1.MouseButtonState = Rootech.UI.Component.MouseButtonState.HOVER;
+            this.cTabControl1.Name = "cTabControl1";
+            this.cTabControl1.OverIndex = -1;
+            this.cTabControl1.ScrollButtonStyle = Rootech.UI.Component.CTabScrollButtonStyle.Always;
+            this.cTabControl1.SelectedIndex = 0;
+            this.cTabControl1.SelectedTab = this.tabPage1;
+            this.cTabControl1.Size = new System.Drawing.Size(300, 300);
+            this.cTabControl1.TabDock = System.Windows.Forms.DockStyle.Top;
+            this.cTabControl1.TabFont = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.cTabControl1.TabIndex = 1;
+            this.cTabControl1.TabMargin = 3;
+            this.cTabControl1.TabRenderer = this.flatTabRenderer1;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.tabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPage1.ImageIndex = 0;
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(292, 267);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(642, 456);
+            this.Controls.Add(this.cTabControl1);
             this.Controls.Add(this.cMenuStrip1);
-            this.MainMenuStrip = this.cMenuStrip1;
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.cMenuStrip1.ResumeLayout(false);
             this.cMenuStrip1.PerformLayout();
+            this.cTabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private Rootech.UI.Component.CMenuStrip cMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tESTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test11ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test12ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tEST2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test21ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test22ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test3ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test31ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test311ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test32ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buildToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem programGroupBuildToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private Rootech.UI.Component.CToolStripMenuItem cToolStripMenuItem1;
+        private Rootech.UI.Component.CTabControl cTabControl1;
+        private Rootech.UI.Component.FlatTabRenderer flatTabRenderer1;
+        private Rootech.UI.Component.CTabPage tabPage1;
     }
 }
 

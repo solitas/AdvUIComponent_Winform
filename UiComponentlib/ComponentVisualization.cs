@@ -9,7 +9,13 @@ namespace Rootech.UI.Component
 {
     public class ComponentVisualization
     {
-        public static int TITLE_BAR_HEIGHT = 24;
+        public static ComponentVisualization _instance;
+        public static ComponentVisualization Instance
+        {
+            get { return _instance ?? new ComponentVisualization(); }
+        }
+
+        public static int TITLE_BAR_HEIGHT = 30;
         public static int PADDING = 14;
         public enum Themes : byte
         {
@@ -233,10 +239,10 @@ namespace Rootech.UI.Component
         public Font ROBOTO_REGULAR_9;
         #endregion
 
-        public ComponentVisualization()
+        private ComponentVisualization()
         {
             // load fontfamilys
-            ROBOTO_MEDIUM_9 = new Font(GetFontFamilyByResource(Resources.Roboto_Medium), 9f);
+            ROBOTO_MEDIUM_9 = new Font(GetFontFamilyByResource(Resources.Roboto_Medium), 8f);
             ROBOTO_MEDIUM_10 = new Font(GetFontFamilyByResource(Resources.Roboto_Medium), 10f);
             ROBOTO_MEDIUM_11 = new Font(GetFontFamilyByResource(Resources.Roboto_Medium), 11f);
             ROBOTO_MEDIUM_12 = new Font(GetFontFamilyByResource(Resources.Roboto_Medium), 12f);

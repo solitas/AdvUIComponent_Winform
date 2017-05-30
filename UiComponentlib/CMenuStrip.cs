@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Rootech.UI.Component
 {
@@ -21,7 +22,12 @@ namespace Rootech.UI.Component
                 _renderingLocation = value;
                 UpdateBounds();
             }
+            get
+            {
+                return _renderingLocation;
+            }
         }
+
         #region "code related interface properties"
         public int Depth { set; get; }
 
@@ -29,66 +35,43 @@ namespace Rootech.UI.Component
 
         public ComponentVisualization Visualization { set; get; }
         #endregion
+        
+        // Constructor
         public CMenuStrip()
         {
+            Visualization = ComponentVisualization.Instance;
+            Renderer = new CMenuStripRender();
+
             if (DesignMode)
             {
                 Dock = DockStyle.None;
                 Anchor |= AnchorStyles.Right;
                 AutoSize = false;
+                this.Padding = new Padding(0);
             }
+
             Stretch = false;
+            
         }
-        protected override void OnParentChanged(EventArgs e)
-        {
-            base.OnParentChanged(e);
-            CMenuStripRender renderer = new CMenuStripRender();
-            renderer.Visualization = Visualization;
-            Renderer = renderer;
-        }
+
         #region "code related to override mehtods"
+        
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            int w = 0;
-
             int leftMargin = 6 + ComponentVisualization.TITLE_BAR_HEIGHT;
-            x = leftMargin;
 
-            if (Items.Count == 0)
+            int w = 0;
+            if (Items.Count > 0)
             {
-                if (_renderingLocation == RenderingLocation.TitleBar)
-                {
-                    y = 0;
-                    width = width - (leftMargin + y) - (ComponentVisualization.PADDING + ComponentVisualization.TITLE_BAR_HEIGHT * 3);
-                }
-                else
-                {
-                    y = ComponentVisualization.TITLE_BAR_HEIGHT + 1;
-                }
-            }
-            else
-            {
-                
+                w = 0;
                 foreach (ToolStripItem item in Items)
                 {
                     w += item.Width;
                 }
-                width = w;
-                y = 0;
             }
-
-            base.SetBoundsCore(x, y, width, height, specified);
+            base.SetBoundsCore(leftMargin, 0, w, ComponentVisualization.TITLE_BAR_HEIGHT, specified);
         }
-
-
-        protected override void OnMouseDown(MouseEventArgs mea)
-        {
-            base.OnMouseDown(mea);
-            if (Parent is FormBase)
-            {
-                //((FormBase)Parent).
-            }
-        }
+       
         #endregion
     }
 }
