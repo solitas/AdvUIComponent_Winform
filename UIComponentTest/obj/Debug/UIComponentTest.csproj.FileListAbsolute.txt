@@ -9,8 +9,6 @@ D:\02_Dev\Github\UIComponentTest\obj\Debug\UIComponentTest.Properties.Resources.
 D:\02_Dev\Github\UIComponentTest\obj\Debug\UIComponentTest.csproj.GenerateResource.Cache
 D:\02_Dev\Github\UIComponentTest\obj\Debug\UIComponentTest.exe
 D:\02_Dev\Github\UIComponentTest\obj\Debug\UIComponentTest.pdb
-I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\UIComponentTest.exe.config
-I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\UIComponentTest.exe
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\UIComponentTest.pdb
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\Rootech.UI.Compoent.dll
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\Rootech.UI.Compoent.pdb
@@ -18,5 +16,7 @@ I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponent
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.MainForm.resources
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.Properties.Resources.resources
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.csproj.GenerateResource.Cache
-I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.exe
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.pdb
+I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\UIComponentTest.exe.config
+I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\bin\Debug\UIComponentTest.exe
+I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.exe

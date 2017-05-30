@@ -44,15 +44,25 @@
     <Compile Include="CButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CMenuStripRender.cs" />
     <Compile Include="ColorScheme.cs" />
     <Compile Include="ComponentVisualization.cs" />
     <Compile Include="FormBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="IControl.cs" />
-    <Compile Include="MenuButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="MouseButtonState.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
