@@ -55,6 +55,7 @@
             this.cTabControl1 = new Rootech.UI.Component.CTabControl();
             this.tabPage1 = new Rootech.UI.Component.CTabPage();
             this.flatTabRenderer1 = new Rootech.UI.Component.FlatTabRenderer();
+            this.tabPage2 = new Rootech.UI.Component.CTabPage();
             this.cMenuStrip1.SuspendLayout();
             this.cTabControl1.SuspendLayout();
             this.SuspendLayout();
@@ -250,18 +251,20 @@
             this.cTabControl1.ActiveColor = System.Drawing.SystemColors.Control;
             this.cTabControl1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.cTabControl1.Controls.Add(this.tabPage1);
+            this.cTabControl1.Controls.Add(this.tabPage2);
             this.cTabControl1.Depth = 0;
+            this.cTabControl1.Dock = System.Windows.Forms.DockStyle.Left;
             this.cTabControl1.ImageIndex = -1;
             this.cTabControl1.InactiveColor = System.Drawing.SystemColors.Window;
             this.cTabControl1.InActiveForeColor = System.Drawing.SystemColors.ControlText;
-            this.cTabControl1.Location = new System.Drawing.Point(9, 44);
+            this.cTabControl1.Location = new System.Drawing.Point(0, 30);
             this.cTabControl1.MouseButtonState = Rootech.UI.Component.MouseButtonState.HOVER;
             this.cTabControl1.Name = "cTabControl1";
             this.cTabControl1.OverIndex = -1;
-            this.cTabControl1.ScrollButtonStyle = Rootech.UI.Component.CTabScrollButtonStyle.Always;
-            this.cTabControl1.SelectedIndex = 0;
-            this.cTabControl1.SelectedTab = this.tabPage1;
-            this.cTabControl1.Size = new System.Drawing.Size(300, 300);
+            this.cTabControl1.ScrollButtonStyle = Rootech.UI.Component.CTabScrollButtonStyle.Never;
+            this.cTabControl1.SelectedIndex = 1;
+            this.cTabControl1.SelectedTab = this.tabPage2;
+            this.cTabControl1.Size = new System.Drawing.Size(180, 530);
             this.cTabControl1.TabDock = System.Windows.Forms.DockStyle.Top;
             this.cTabControl1.TabFont = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.cTabControl1.TabIndex = 1;
@@ -270,21 +273,31 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
             this.tabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPage1.ImageIndex = 0;
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(292, 267);
+            this.tabPage1.Size = new System.Drawing.Size(172, 497);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPage2.ImageIndex = 0;
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(172, 497);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(642, 456);
+            this.ClientSize = new System.Drawing.Size(899, 560);
             this.Controls.Add(this.cTabControl1);
             this.Controls.Add(this.cMenuStrip1);
             this.Name = "MainForm";
@@ -327,6 +340,7 @@
         private Rootech.UI.Component.CTabControl cTabControl1;
         private Rootech.UI.Component.FlatTabRenderer flatTabRenderer1;
         private Rootech.UI.Component.CTabPage tabPage1;
+        private Rootech.UI.Component.CTabPage tabPage2;
     }
 }
 

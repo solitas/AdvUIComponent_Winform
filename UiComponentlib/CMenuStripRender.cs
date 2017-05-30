@@ -27,8 +27,6 @@ namespace Rootech.UI.Component
             var itemRect = GetItemRect(e.Item);
             if (e.Item.IsOnDropDown)
             {
-                var itemRect = GetItemRect(e.Item);
-                var textRect = new Rectangle(24, itemRect.Y, itemRect.Width - (24 + 16), itemRect.Height);
                 var brush = e.Item.Enabled ? Visualization.GetPrimaryTextBrush() : Visualization.GetDisabledOrHintBrush();
                 g.DrawString(e.Text, Visualization.ROBOTO_REGULAR_9, brush, itemRect, new StringFormat()
                 {

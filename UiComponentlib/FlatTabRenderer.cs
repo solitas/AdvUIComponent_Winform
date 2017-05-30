@@ -30,7 +30,7 @@ namespace Rootech.UI.Component
                 using (Brush brush = new SolidBrush(foreColor))
                 using (Pen pen = new Pen(borderColor))
                 {
-                    graphics.FillRoundRect(brush, headerRect, 5f);
+                    graphics.FillRectangle(brush, headerRect);
                 }
             }
             else
