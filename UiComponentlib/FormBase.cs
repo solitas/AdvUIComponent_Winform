@@ -9,7 +9,7 @@ using static Rootech.UI.Component.Win32Utility;
 
 namespace Rootech.UI.Component
 {
-    public partial class FormBase : Form
+    public partial class FormBase : Form, IControl
     {
         private enum ResizeDirection
         {
@@ -94,6 +94,11 @@ namespace Rootech.UI.Component
             {HTBOTTOMLEFT,  WMSZ_BOTTOMLEFT},
             {HTBOTTOMRIGHT, WMSZ_BOTTOMRIGHT}
         };
+        public int Depth { set; get; }
+
+        public MouseButtonState MouseButtonState { set; get; }
+
+        public ComponentVisualization Visualization { set; get; }
 
         #region "Fileds related to appearance"
         public bool Sizable { get; set; }
@@ -128,10 +133,11 @@ namespace Rootech.UI.Component
                 return par;
             }
         }
-
         // constructor
         public FormBase()
         {
+            Visualization = new ComponentVisualization();
+
             this.FormBorderStyle = FormBorderStyle.None;
             DoubleBuffered = true;
             Sizable = true;
@@ -327,6 +333,42 @@ namespace Rootech.UI.Component
             var newE = new MouseEventArgs(MouseButtons.None, 0, clientCursorPos.X, clientCursorPos.Y, 0);
             OnMouseMove(newE);
         }
+
+        protected override void OnControlAdded(ControlEventArgs e)
+        {
+            base.OnControlAdded(e);
+
+            if (e.Control is IControl)
+            {
+                var ctrl = e.Control as IControl;
+                ctrl.Visualization = Visualization;
+            }
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            var g = e.Graphics;
+
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            g.Clear(ComponentVisualization.BACKGROUND_LIGHT);
+            g.FillRectangle(Visualization.ColorScheme.DarkPrimaryBrush, _titleBarBounds);
+            // draw border
+            using (var borderPen = new Pen(ComponentVisualization.DIVIDERS_WHITE, 1))
+            {
+                g.DrawLine(borderPen, new Point(0, _titleBarBounds.Bottom), new Point(0, Height - 2));
+                g.DrawLine(borderPen, new Point(Width - 1, _titleBarBounds.Bottom), new Point(Width - 1, Height - 2));
+                g.DrawLine(borderPen, new Point(0, Height - 1), new Point(Width - 1, Height - 1));
+            }
+            if (Icon != null)
+            {
+                int margin = 3;
+                int x = margin;
+                int y = margin;
+                int iconSz = TITLE_BAR_HEIGHT - margin * 2;
+                g.DrawImage(Icon.ToBitmap(), new Rectangle(x, y, iconSz, iconSz));
+            }
+            PaintTitle(g);
+        }
         #endregion
 
         private void CheckAeroEnabled()
@@ -343,34 +385,7 @@ namespace Rootech.UI.Component
             }
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            var g = e.Graphics;
 
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            g.Clear(BackColor);
-            using (var TitleBackBrush = new SolidBrush(TitleBarBackColor))
-            {
-                g.FillRectangle(TitleBackBrush, _titleBarBounds);
-            }
-            // draw border
-            using (var borderPen = new Pen(_dividerColor, 1))
-            {
-                g.DrawLine(borderPen, new Point(0, _titleBarBounds.Bottom), new Point(0, Height - 2));
-                g.DrawLine(borderPen, new Point(Width - 1, _titleBarBounds.Bottom), new Point(Width - 1, Height - 2));
-                g.DrawLine(borderPen, new Point(0, Height - 1), new Point(Width - 1, Height - 1));
-            }
-            if (Icon != null)
-            {
-                int margin = 3;
-                int x = margin;
-                int y = margin;
-                int iconSz = TITLE_BAR_HEIGHT - margin * 2;
-                g.DrawImage(Icon.ToBitmap(), new Rectangle(x, y, iconSz, iconSz));
-            }
-            PaintTitle(g);
-        }
 
         #region "Code related to draw form child controls"
         protected void PaintTitle(Graphics graphics)
@@ -378,8 +393,8 @@ namespace Rootech.UI.Component
             var isShowMinimumButton = MinimizeBox && ControlBox;
             var isShowMaximumButton = MaximizeBox && ControlBox;
 
-            using (var hoveredBrush = new SolidBrush(_buttonHighlightColor))
-            using (var pressedBrush = new SolidBrush(_buttonPressedColor))
+            using (var hoveredBrush = new SolidBrush(ComponentVisualization.FLAT_BUTTON_BACKGROUND_HOVER_DARK))
+            using (var pressedBrush = new SolidBrush(ComponentVisualization.FLAT_BUTTON_BACKGROUND_PRESSED_DARK))
             using (var xButtonHoverBrush = new SolidBrush(Color.FromArgb(150, 255, 0, 0)))
             {
                 if (isShowMinimumButton && _buttonState == ButtonState.MinOver)
@@ -450,7 +465,6 @@ namespace Rootech.UI.Component
                             _xButtonBounds.Y + (int)(_xButtonBounds.Height * 0.66));
                     }
                 }
-
             }
         }
         #endregion

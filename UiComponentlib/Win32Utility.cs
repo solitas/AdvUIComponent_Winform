@@ -13,12 +13,11 @@ namespace Rootech.UI.Component
             private int topHeight;
             private int bottomHeight;
 
-            public int LeftWidth { get => leftWidth; set => leftWidth = value; }
-            public int RightWidth { get => rightWidth; set => rightWidth = value; }
-            public int TopHeight { get => topHeight; set => topHeight = value; }
-            public int BottomHeight { get => bottomHeight; set => bottomHeight = value; }
+            public int LeftWidth { get { return leftWidth; } set { leftWidth = value; } }
+            public int RightWidth { get { return rightWidth; } set { rightWidth = value; } }
+            public int TopHeight { get { return topHeight; } set { topHeight = value; } }
+            public int BottomHeight { get { return bottomHeight; } set { bottomHeight = value; } }
         }
-
         [Flags()]
         public enum RedrawWindowFlag : uint
         {

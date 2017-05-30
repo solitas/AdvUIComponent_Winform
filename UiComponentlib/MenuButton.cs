@@ -7,21 +7,33 @@ using System.Windows.Forms;
 
 namespace Rootech.UI.Component
 {
-    public class MenuButton : Button
+    public class MenuButton : CButton
     {
         private Color _hoverForeColor;
         private Color _hoverButtonColor;
         private Color _hoverBorderColor;
 
-        
+
         public MenuButton()
         {
 
         }
 
-        public Color HoverBorderColor { get => _hoverBorderColor; set => _hoverBorderColor = value; }
-        public Color HoverButtonColor { get => _hoverButtonColor; set => _hoverButtonColor = value; }
-        public Color HoverForeColor { get => _hoverForeColor; set => _hoverForeColor = value; }
+        public Color HoverBorderColor
+        {
+            get { return _hoverBorderColor; }
+            set { _hoverBorderColor = value; }
+        }
+        public Color HoverButtonColor
+        {
+            get { return _hoverButtonColor; }
+            set { _hoverButtonColor = value; }
+        }
+        public Color HoverForeColor
+        {
+            get { return _hoverForeColor; }
+            set { _hoverForeColor = value; }
+        }
 
 
         protected override void OnMouseDown(MouseEventArgs mevent)
