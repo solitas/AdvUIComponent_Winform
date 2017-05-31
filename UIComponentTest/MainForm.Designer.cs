@@ -52,12 +52,13 @@
             this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.programGroupBuildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cToolStripMenuItem1 = new Rootech.UI.Component.CToolStripMenuItem();
-            this.cTabControl1 = new Rootech.UI.Component.CTabControl();
-            this.tabPage1 = new Rootech.UI.Component.CTabPage();
-            this.flatTabRenderer1 = new Rootech.UI.Component.FlatTabRenderer();
-            this.tabPage2 = new Rootech.UI.Component.CTabPage();
+            this.ccTabControl1 = new Rootech.UI.Component.CCTabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.cMenuStrip1.SuspendLayout();
-            this.cTabControl1.SuspendLayout();
+            this.ccTabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cMenuStrip1
@@ -246,51 +247,64 @@
             this.cToolStripMenuItem1.Text = "Help";
             this.cToolStripMenuItem1.Visualization = null;
             // 
-            // cTabControl1
+            // ccTabControl1
             // 
-            this.cTabControl1.ActiveColor = System.Drawing.SystemColors.Control;
-            this.cTabControl1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.cTabControl1.Controls.Add(this.tabPage1);
-            this.cTabControl1.Controls.Add(this.tabPage2);
-            this.cTabControl1.Depth = 0;
-            this.cTabControl1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.cTabControl1.ImageIndex = -1;
-            this.cTabControl1.InactiveColor = System.Drawing.SystemColors.Window;
-            this.cTabControl1.InActiveForeColor = System.Drawing.SystemColors.ControlText;
-            this.cTabControl1.Location = new System.Drawing.Point(0, 30);
-            this.cTabControl1.MouseButtonState = Rootech.UI.Component.MouseButtonState.HOVER;
-            this.cTabControl1.Name = "cTabControl1";
-            this.cTabControl1.OverIndex = -1;
-            this.cTabControl1.ScrollButtonStyle = Rootech.UI.Component.CTabScrollButtonStyle.Never;
-            this.cTabControl1.SelectedIndex = 1;
-            this.cTabControl1.SelectedTab = this.tabPage2;
-            this.cTabControl1.Size = new System.Drawing.Size(180, 530);
-            this.cTabControl1.TabDock = System.Windows.Forms.DockStyle.Top;
-            this.cTabControl1.TabFont = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cTabControl1.TabIndex = 1;
-            this.cTabControl1.TabMargin = 3;
-            this.cTabControl1.TabRenderer = this.flatTabRenderer1;
+            this.ccTabControl1.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.ccTabControl1.BackgroundColor = System.Drawing.Color.White;
+            this.ccTabControl1.Controls.Add(this.tabPage1);
+            this.ccTabControl1.Controls.Add(this.tabPage2);
+            this.ccTabControl1.Controls.Add(this.tabPage3);
+            this.ccTabControl1.Controls.Add(this.tabPage4);
+            this.ccTabControl1.Depth = 0;
+            this.ccTabControl1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ccTabControl1.Location = new System.Drawing.Point(0, 30);
+            this.ccTabControl1.Margin = new System.Windows.Forms.Padding(0);
+            this.ccTabControl1.MouseButtonState = Rootech.UI.Component.MouseButtonState.HOVER;
+            this.ccTabControl1.Name = "ccTabControl1";
+            this.ccTabControl1.Padding = new System.Drawing.Point(0, 0);
+            this.ccTabControl1.SelectedIndex = 0;
+            this.ccTabControl1.Size = new System.Drawing.Size(720, 530);
+            this.ccTabControl1.TabIndex = 1;
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabPage1.ImageIndex = 0;
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Location = new System.Drawing.Point(0, 33);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(172, 497);
+            this.tabPage1.Size = new System.Drawing.Size(718, 495);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
-            this.tabPage2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabPage2.ImageIndex = 0;
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Location = new System.Drawing.Point(0, 33);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(172, 497);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(718, 495);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Location = new System.Drawing.Point(0, 33);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(718, 495);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(0, 33);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(718, 495);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -298,14 +312,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(899, 560);
-            this.Controls.Add(this.cTabControl1);
+            this.Controls.Add(this.ccTabControl1);
             this.Controls.Add(this.cMenuStrip1);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.cMenuStrip1.ResumeLayout(false);
             this.cMenuStrip1.PerformLayout();
-            this.cTabControl1.ResumeLayout(false);
+            this.ccTabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -337,10 +351,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private Rootech.UI.Component.CToolStripMenuItem cToolStripMenuItem1;
-        private Rootech.UI.Component.CTabControl cTabControl1;
-        private Rootech.UI.Component.FlatTabRenderer flatTabRenderer1;
-        private Rootech.UI.Component.CTabPage tabPage1;
-        private Rootech.UI.Component.CTabPage tabPage2;
+        private Rootech.UI.Component.CCTabControl ccTabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
     }
 }
 

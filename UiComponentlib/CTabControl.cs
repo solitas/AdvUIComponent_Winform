@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -24,57 +21,273 @@ namespace Rootech.UI.Component
         public ComponentVisualization Visualization { set; get; }
         #endregion
 
+        #region "Code related to event"
         /// <summary>
-        /// Creates a new instance of the <see cref="UserTabControl"> </see> class
+        /// Occurs when the selected tab is about to change.
         /// </summary>
-        public CTabControl()
-        {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, true);
-            defaultImageIndex = -1;
-            tabLengths = new ArrayList(5);
-            leftArrow = new Point[3];
-            rightArrow = new Point[3];
-            for (int i = 0; i < 3; i++)
-            {
-                leftArrow[i] = new Point(0, 0);
-                rightArrow[i] = new Point(0, 0);
-            }
-            userTabFont = Font;
-            boldTabFont = new Font(Font.FontFamily.Name, Font.Size, FontStyle.Bold);
-            userTabMargin = 3;
-            userTabDock = DockStyle.Top;
-            selectedIndex = -1;
-            foreBrush = new SolidBrush(ForeColor);
-            inactiveForeColor = ForeColor;
-            inactiveForeBrush = new SolidBrush(ForeColor);
+        public event TabChangingEventHandler TabChanging;
 
-            activeBrush = (Brush)SystemBrushes.Control.Clone();
-            activeColor = SystemColors.Control;
-            inActiveBrush = (Brush)SystemBrushes.Window.Clone();
-            inActiveColor = SystemColors.Window;
-            borderPen = (Pen)Pens.DarkGray.Clone();
-            shadowPen = (Pen)SystemPens.ControlDark.Clone();
-            highlightPen = (Pen)SystemPens.ControlLight.Clone();
-            displayRectangle = Rectangle.Empty;
-            tabsRectangle = Rectangle.Empty;
-            clientRectangle = Rectangle.Empty;
-            transformedDisplayRectangle = Rectangle.Empty;
-            Height = Width = 300;
-            BackColor = SystemColors.Control;
-            CalculateTabSpan();
+        /// <summary>
+        /// Occurs after the selected tab has changed.
+        /// </summary>
+        public event EventHandler TabChanged;
+
+        /// <summary>
+        /// Occurs after the border color has changed
+        /// </summary>
+        public event EventHandler BorderColorChanged;
+
+        /// <summary>
+        /// Occurs after the active color has changed
+        /// </summary>
+        public event EventHandler ActiveColorChanged;
+
+        /// <summary>
+        /// Occurs after the inactive color has changed
+        /// </summary>
+        public event EventHandler InactiveColorChanged;
+
+        /// <summary>
+        /// Occurs after the margin for the control has changed.
+        /// </summary>
+        public event EventHandler TabMarginChanged;
+
+        /// <summary>
+        /// Occurs after the <see cref="TabDock"/> property
+        /// has changed.
+        /// </summary>
+        public event EventHandler TabDockChanged;
+
+        /// <summary>
+        /// Occurs after the <see cref="TabRenderer"/> property
+        /// has changed.
+        /// </summary>
+        public event EventHandler TabDrawerChanged;
+
+        /// <summary>
+        /// Occurs after the <see cref="TabFont"/> property
+        /// has changed.
+        /// </summary>
+        public event EventHandler TabFontChanged;
+
+        /// <summary>
+        /// Occurs after the <see cref="ScrollButtonStyle"/>
+        /// property has changed.
+        /// </summary>
+        public event EventHandler ScrollButtonStyleChanged;
+        /// <summary>
+        /// Used to monitor the text changing of a <see cref="CTabPage" />.
+        /// </summary>
+        private EventHandler ChildTextChangeEventHandler;
+        #endregion
+
+        #region "Code related to fields"
+        /// <summary>
+        /// Monitors when child <see cref="CTabPage"/>s have their
+        /// <see cref="CTabPage.Text"/> property changed.
+        /// </summary>
+        /// <param name="sender">A <see cref="CTabPage"/>.</param>
+        /// <param name="ea">Some <see cref="EventArgs"/>.</param>
+        private void ChildTabTextChanged(object sender, EventArgs ea)
+        {
             CalculateTabLengths();
-            CalculateLastVisibleTabIndex();
-            ChildTextChangeEventHandler = new EventHandler(UserTabPage_TextChanged);
-            OverIndex = -1;
+            InU();
         }
 
+        /// <summary>
+        /// The index to use as the default image for the tabs.
+        /// </summary>
+        private int defaultImageIndex;
+
+        /// <summary>
+        /// The <see cref="ImageList"/> used to draw the images in
+        /// the tabs.
+        /// </summary>
+        private ImageList images;
+
+        /// <summary>
+        /// A flag to indicate if the tabs can scroll left.
+        /// </summary>
+        private bool canScrollLeft;
+
+        /// <summary>
+        /// A flag to indicate if the tabs can scroll right.
+        /// </summary>
+        private bool canScrollRight;
+
+        /// <summary>
+        /// A flag to indicate if scroll buttons should get drawn.
+        /// </summary>
+        private CTabScrollButtonStyle showScrollButton;
+
+        /// <summary>
+        /// The array of floats whose each entry measures a tab's width.
+        /// </summary>
+        private ArrayList tabLengths;
+
+        /// <summary>
+        /// The sum of the lengths of all the tabs.
+        /// </summary>
+        private float totalTabSpan;
+
+        /// <summary>
+        /// The margin around the visible <see cref="CTabPage"/>.
+        /// </summary>
+        private int userTabMargin;
+
+        /// <summary>
+        /// The span of the tabs. Used as the height/width of the
+        /// tabs, depending on the orientation.
+        /// </summary>
+        private float tabSpan;
+
+        /// <summary>
+        /// The amount that the tabs have been scrolled to the left.
+        /// </summary>
+        private float tabLeftDif;
+
+        /// <summary>
+        /// The <see cref="Point"/>s that define the left scroll arrow.
+        /// </summary>
+        private Point[] leftArrow;
+
+        /// <summary>
+        /// The <see cref="Point"/>s that define the right scroll arrow.
+        /// </summary>
+        private Point[] rightArrow;
+
+        /// <summary>
+        /// The index of the last visible tab.
+        /// </summary>
+        private int lastVisibleTabIndex;
+
+        /// <summary>
+        /// The length from the left of the tab control
+        /// to the left of the last visible tab.
+        /// </summary>
+        private float lastVisibleTabLeft;
+
+        /// <summary>
+        /// The brush used to draw the strings in the tabs.
+        /// </summary>
+        private Brush foreBrush;
+        private Brush inactiveForeBrush;
+        private Color inactiveForeColor;
+        /// <summary>
+        /// The color of the active tab and area.
+        /// </summary>
+        private Color activeColor;
+
+        /// <summary>
+        /// The brush used to color the active-colored area.
+        /// </summary>
+        private Brush activeBrush;
+
+        /// <summary>
+        /// The color of the inactive areas.
+        /// </summary>
+        private Color inActiveColor;
+
+        /// <summary>
+        /// The brush used to color the inactive-colored area.
+        /// </summary>
+        private Brush inActiveBrush;
+
+        /// <summary>
+        /// The pen used to draw the highlight lines.
+        /// </summary>
+        private Pen highlightPen;
+
+        /// <summary>
+        /// The pen used to draw the shadow lines.
+        /// </summary>
+        private Pen shadowPen;
+
+        /// <summary>
+        /// The pen used to draw the border.
+        /// </summary>
+        private Pen borderPen;
+
+        /// <summary>
+        /// The index of the selected tab.
+        /// </summary>
+        private int selectedIndex;
+
+        /// <summary>
+        /// The currently selected tab.
+        /// </summary>
+        private CTabPage selectedTab;
+
+        /// <summary>
+        /// The side on which the tabs get docked.
+        /// </summary>
+        private DockStyle userTabDock;
+
+        /// <summary>
+        /// The rectangle in which the tabs get drawn.
+        /// </summary>
+        private Rectangle tabsRectangle;
+
+        /// <summary>
+        /// The rectangle in which the client gets drawn.
+        /// </summary>
+        private Rectangle clientRectangle;
+
+        /// <summary>
+        /// The rectangle in which the currently selected
+        /// <see cref="CTabPage"/> gets drawn oriented as
+        /// if the tabs were docked to the top of the control.
+        /// </summary>
+        private Rectangle displayRectangle;
+
+        /// <summary>
+        /// The rectangle transformed for the <see cref="DisplayRectangle"/>
+        /// property to return.
+        /// </summary>
+        private Rectangle transformedDisplayRectangle;
+
+        /// <summary>
+        /// The height used to calculate the rectangles.
+        /// </summary>
+        private int calcHeight;
+
+        /// <summary>
+        /// The width used to calculate the rectangles.
+        /// </summary>
+        private int calcWidth;
+
+        /// <summary>
+        /// The regular font used to draw the strings in the tabs.
+        /// </summary>
+        private Font userTabFont;
+
+        /// <summary>
+        /// The bold font used to draw the strings in the active tab.
+        /// </summary>
+        private Font boldTabFont;
+
+        /// <summary>
+        /// The <see cref="UserTabRenderer"/> used to draw the
+        /// tabs.
+        /// </summary>
+        private CTabRenderer tabRenderer;
+
+
+
+        /// <summary>
+        /// Used to monitor if a person has elected to scroll the tabs.
+        /// </summary>
+        private bool keepScrolling;
+        #endregion
+
+        #region "Code related to properties"
         /// <summary>
         /// Gets and sets the value of the index of the image in
         /// <see cref="ImageList"/> to use to draw the default image on tabs
         /// that do not specify an image to use.
         /// </summary>
         /// <value>
-        /// The zero-based index to the image in the <see cref="UserTabControl.ImageList"/>
+        /// The zero-based index to the image in the <see cref="CTabControl.ImageList"/>
         /// that appears on the tab. The default is -1, which signifies no image.
         /// </value>
         /// <exception cref="ArgumentException">
@@ -96,11 +309,11 @@ namespace Rootech.UI.Component
 
         /// <summary>
         /// Gets and sets the <see cref="ImageList"/> used by this
-        /// <see cref="UserTabControl"/>.
+        /// <see cref="CTabControl"/>.
         /// </summary>
         /// <remarks>
         /// To display an image on a tab, set the <see cref="ImageIndex"/> property
-        /// of that <see cref="UserTabPage"/>. The <see cref="ImageIndex"/> acts as the
+        /// of that <see cref="CTabPage"/>. The <see cref="ImageIndex"/> acts as the
         /// index into the <see cref="ImageList"/>.
         /// </remarks>
         public new virtual ImageList ImageList
@@ -119,7 +332,7 @@ namespace Rootech.UI.Component
 
         /// <summary>
         /// Gets and sets the <see cref="UserTabRenderer"/> used
-        /// to draw the tabs for the <see cref="UserTabControl"/>.
+        /// to draw the tabs for the <see cref="CTabControl"/>.
         /// </summary>
         /// <remarks>
         /// <para>The default value of this property is <b>null</b>.</para>
@@ -244,7 +457,7 @@ namespace Rootech.UI.Component
         /// <summary>
         /// The <see cref="Color"/> of the active tab's
         /// background and the margins around the visible
-        /// <see cref="UserTabPage"/>.
+        /// <see cref="CTabPage"/>.
         /// </summary>
         /// <remarks>
         /// The default value for this is
@@ -316,11 +529,11 @@ namespace Rootech.UI.Component
 
         /// <summary>
         /// Gets and sets the zero-based index of the selected
-        /// <see cref="UserTabPage"/>.
+        /// <see cref="CTabPage"/>.
         /// </summary>
         /// <exception cref="ArgumentException">
         /// Thrown if this property gets set to a value less than 0 when
-        /// <see cref="UserTabPage"/>s exist in the control collection.
+        /// <see cref="CTabPage"/>s exist in the control collection.
         /// </exception>
         /// <exception cref="IndexOutOfRangeException">
         /// Thrown if this property gets set to a value greater than
@@ -389,12 +602,12 @@ namespace Rootech.UI.Component
         /// Gets and sets the currently selected tab.
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Thrown if this property gets set to a <see cref="UserTabPage"/>
-        /// that has not been added to the <see cref="UserTabControl"/>.
+        /// Thrown if this property gets set to a <see cref="CTabPage"/>
+        /// that has not been added to the <see cref="CTabControl"/>.
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// Thrown if this property gets set to a <b>null</b> value when
-        /// <see cref="UserTabPage"/>s exist in the control.
+        /// <see cref="CTabPage"/>s exist in the control.
         /// </exception>
         public new virtual CTabPage SelectedTab
         {
@@ -410,7 +623,7 @@ namespace Rootech.UI.Component
                 }
                 else if (value != null && !Controls.Contains(value))
                 {
-                    throw new ArgumentException("Tried to set the SelectedTab property to a UserTabPage that has not been added to this UserTabControl.");
+                    throw new ArgumentException("Tried to set the SelectedTab property to a CTabPage that has not been added to this CTabControl.");
                 }
                 if (Controls.Count > 0)
                 {
@@ -479,7 +692,51 @@ namespace Rootech.UI.Component
                 return transformedDisplayRectangle;
             }
         }
+#endregion
 
+        public CTabControl()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, true);
+
+            defaultImageIndex = -1;
+            tabLengths = new ArrayList(5);
+            leftArrow = new Point[3];
+            rightArrow = new Point[3];
+            for (int i = 0; i < 3; i++)
+            {
+                leftArrow[i] = new Point(0, 0);
+                rightArrow[i] = new Point(0, 0);
+            }
+            userTabFont = Font;
+            boldTabFont = new Font(Font.FontFamily.Name, Font.Size, FontStyle.Bold);
+            userTabMargin = 3;
+            userTabDock = DockStyle.Top;
+            selectedIndex = -1;
+            foreBrush = new SolidBrush(ForeColor);
+            inactiveForeColor = ForeColor;
+            inactiveForeBrush = new SolidBrush(ForeColor);
+
+            activeBrush = (Brush)SystemBrushes.Control.Clone();
+            activeColor = SystemColors.Control;
+            inActiveBrush = (Brush)SystemBrushes.Window.Clone();
+            inActiveColor = SystemColors.Window;
+            borderPen = (Pen)Pens.DarkGray.Clone();
+            shadowPen = (Pen)SystemPens.ControlDark.Clone();
+            highlightPen = (Pen)SystemPens.ControlLight.Clone();
+            displayRectangle = Rectangle.Empty;
+            tabsRectangle = Rectangle.Empty;
+            clientRectangle = Rectangle.Empty;
+            transformedDisplayRectangle = Rectangle.Empty;
+            Height = Width = 300;
+            BackColor = SystemColors.Control;
+            CalculateTabSpan();
+            CalculateTabLengths();
+            CalculateLastVisibleTabIndex();
+            ChildTextChangeEventHandler = new EventHandler(TabPage_TextChanged);
+            OverIndex = -1;
+        }
+        
+        #region "Code related to Bounds"
         /// <summary>
         /// Returns the bounding rectangle for a specified tab in this tab control.
         /// </summary>
@@ -586,7 +843,6 @@ namespace Rootech.UI.Component
             }
             return r;
         }
-
         /// <summary>
         /// Scrolls the tabs by the specified <i>amount</i>.
         /// </summary>
@@ -619,60 +875,9 @@ namespace Rootech.UI.Component
             InU();
         }
 
-        /// <summary>
-        /// Occurs when the selected tab is about to change.
-        /// </summary>
-        public event TabChangingEventHandler TabChanging;
+        #endregion
 
-        /// <summary>
-        /// Occurs after the selected tab has changed.
-        /// </summary>
-        public event EventHandler TabChanged;
-
-        /// <summary>
-        /// Occurs after the border color has changed
-        /// </summary>
-        public event EventHandler BorderColorChanged;
-
-        /// <summary>
-        /// Occurs after the active color has changed
-        /// </summary>
-        public event EventHandler ActiveColorChanged;
-
-        /// <summary>
-        /// Occurs after the inactive color has changed
-        /// </summary>
-        public event EventHandler InactiveColorChanged;
-
-        /// <summary>
-        /// Occurs after the margin for the control has changed.
-        /// </summary>
-        public event EventHandler TabMarginChanged;
-
-        /// <summary>
-        /// Occurs after the <see cref="TabDock"/> property
-        /// has changed.
-        /// </summary>
-        public event EventHandler TabDockChanged;
-
-        /// <summary>
-        /// Occurs after the <see cref="TabRenderer"/> property
-        /// has changed.
-        /// </summary>
-        public event EventHandler TabDrawerChanged;
-
-        /// <summary>
-        /// Occurs after the <see cref="TabFont"/> property
-        /// has changed.
-        /// </summary>
-        public event EventHandler TabFontChanged;
-
-        /// <summary>
-        /// Occurs after the <see cref="ScrollButtonStyle"/>
-        /// property has changed.
-        /// </summary>
-        public event EventHandler ScrollButtonStyleChanged;
-
+        #region "Code related to event handler"
         /// <summary>
         /// Fires the <see cref="ScrollButtonStyleChanged"/> event.
         /// </summary>
@@ -681,10 +886,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnScrollButtonStyleChanged(EventArgs ea)
         {
-            if (ScrollButtonStyleChanged != null)
-            {
-                ScrollButtonStyleChanged(this, ea);
-            }
+            ScrollButtonStyleChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -695,10 +897,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnTabFontChanged(EventArgs ea)
         {
-            if (TabFontChanged != null)
-            {
-                TabFontChanged(this, ea);
-            }
+            TabFontChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -709,10 +908,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnTabDrawerChanged(EventArgs ea)
         {
-            if (TabDrawerChanged != null)
-            {
-                TabDrawerChanged(this, ea);
-            }
+            TabDrawerChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -723,10 +919,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnTabDockChanged(EventArgs ea)
         {
-            if (TabDockChanged != null)
-            {
-                TabDockChanged(this, ea);
-            }
+            TabDockChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -737,10 +930,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnTabMarginChanged(EventArgs ea)
         {
-            if (TabMarginChanged != null)
-            {
-                TabMarginChanged(this, ea);
-            }
+            TabMarginChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -751,10 +941,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnInactiveColorChanged(EventArgs ea)
         {
-            if (InactiveColorChanged != null)
-            {
-                InactiveColorChanged(this, ea);
-            }
+            InactiveColorChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -765,10 +952,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnActiveColorChanged(EventArgs ea)
         {
-            if (ActiveColorChanged != null)
-            {
-                ActiveColorChanged(this, ea);
-            }
+            ActiveColorChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -779,10 +963,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnBorderColorChanged(EventArgs ea)
         {
-            if (BorderColorChanged != null)
-            {
-                BorderColorChanged(this, ea);
-            }
+            BorderColorChanged?.Invoke(this, ea);
         }
 
         /// <summary>
@@ -793,10 +974,7 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnTabChanging(TabChangingEventArgs tcea)
         {
-            if (TabChanging != null)
-            {
-                TabChanging(this, tcea);
-            }
+            TabChanging?.Invoke(this, tcea);
         }
 
         /// <summary>
@@ -807,30 +985,22 @@ namespace Rootech.UI.Component
         /// </param>
         protected virtual void OnTabChanged(EventArgs ea)
         {
-            if (TabChanged != null)
-            {
-                TabChanged(this, ea);
-            }
+            TabChanged?.Invoke(this, ea);
         }
 
-        /// <summary>
-        /// Overridden. Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="mea">
-        /// See <see cref="Control.OnMouseLeave(MouseEventArgs)"/>.
-        /// </param>
+        private void TabPage_TextChanged(object sender, EventArgs e)
+        {
+            CalculateTabLengths();
+            CalculateLastVisibleTabIndex();
+        }
+        #endregion
+
+        #region "Code related to override methods"
         protected override void OnMouseLeave(EventArgs mea)
         {
             OverIndex = -1;
             Invalidate();
         }
-
-        /// <summary>
-        /// Overridden. Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="mea">
-        /// See <see cref="Control.OnMouseMove(MouseEventArgs)"/>.
-        /// </param>
         protected override void OnMouseMove(MouseEventArgs mea)
         {
             base.OnMouseMove(mea);
@@ -874,15 +1044,9 @@ namespace Rootech.UI.Component
                 Invalidate();
             }
         }
-
-        /// <summary>
-        /// Overridden. Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="mea">
-        /// See <see cref="Control.OnMouseDown(MouseEventArgs)"/>.
-        /// </param>
         protected override void OnMouseDown(MouseEventArgs mea)
         {
+            // TabScroll button을 눌렀을 때 처리
             base.OnMouseDown(mea);
             Point p = new Point(mea.X - 2 * userTabMargin, mea.Y);
             switch (userTabDock)
@@ -936,13 +1100,6 @@ namespace Rootech.UI.Component
                 }
             }
         }
-
-        /// <summary>
-        /// Overridden. Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="mea">
-        /// Some <see cref="MouseEventArgs"/>.
-        /// </param>
         protected override void OnMouseUp(MouseEventArgs mea)
         {
             lock (this)
@@ -951,13 +1108,6 @@ namespace Rootech.UI.Component
             }
             base.OnMouseUp(mea);
         }
-
-        /// <summary>
-        /// Overridden. Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="cea">
-        /// See <see cref="Control.OnControlAdded(ControlEventArgs)"/>.
-        /// </param>
         protected override void OnControlAdded(ControlEventArgs cea)
         {
             base.OnControlAdded(cea);
@@ -973,13 +1123,6 @@ namespace Rootech.UI.Component
             CalculateLastVisibleTabIndex();
             InU();
         }
-
-        /// <summary>
-        /// Overridden. Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="cea">
-        /// See <see cref="Control.OnControlRemoved(ControlEventArgs)"/>.
-        /// </param>
         protected override void OnControlRemoved(ControlEventArgs cea)
         {
             cea.Control.TextChanged -= ChildTextChangeEventHandler;
@@ -1000,13 +1143,6 @@ namespace Rootech.UI.Component
             CalculateLastVisibleTabIndex();
             InU();
         }
-
-        /// <summary>
-        /// Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="disposing">
-        /// See <see cref="Control.Dispose(bool)"/>.
-        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1029,13 +1165,6 @@ namespace Rootech.UI.Component
                 }
             }
         }
-
-        /// <summary>
-        /// Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="pea">
-        /// See <see cref="Control.OnSizeChanged(EventArgs)"/>.
-        /// </param>
         protected override void OnPaint(PaintEventArgs pea)
         {
             if (Controls.Count > 0)
@@ -1223,13 +1352,6 @@ namespace Rootech.UI.Component
             pea.Graphics.ResetTransform();
             pea.Graphics.DrawRectangle(borderPen, 0, 0, ClientRectangle.Width - 1, ClientRectangle.Height - 1);
         }
-
-        /// <summary>
-        /// Inherited from <see cref="Control"/>.
-        /// </summary>
-        /// <param name="e">
-        /// See <see cref="Control.OnSizeChanged(EventArgs)"/>.
-        /// </param>
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
@@ -1243,33 +1365,13 @@ namespace Rootech.UI.Component
             PerformLayout();
             InU();
         }
-
-        /// <summary>
-        /// Overriden from <see cref="Control"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="UserTabControl.ControlCollection"/>.
-        /// </returns>
-        protected override System.Windows.Forms.Control.ControlCollection CreateControlsInstance()
+        protected override Control.ControlCollection CreateControlsInstance()
         {
             return new CTabControl.ControlCollection(this);
         }
+        #endregion
 
-        /// <summary>
-        /// Handles when the text changes for a control.
-        /// </summary>
-        /// <param name="sender">
-        /// The <see cref="UserTabPage"/> whose text changed.
-        /// </param>
-        /// <param name="e">
-        /// Some <see cref="EventArgs"/>.
-        /// </param>
-        private void UserTabPage_TextChanged(object sender, EventArgs e)
-        {
-            CalculateTabLengths();
-            CalculateLastVisibleTabIndex();
-        }
-
+        #region "Code related to calculate properties"
         /// <summary>
         /// Calculates the last visible tab shown on the control.
         /// </summary>
@@ -1292,7 +1394,7 @@ namespace Rootech.UI.Component
         /// <summary>
         /// Calculates and caches the length of each tab given the value
         /// of the <see cref="Control.Text"/> property of each
-        /// <see cref="UserTabPage"/>.
+        /// <see cref="CTabPage"/>.
         /// </summary>
         private void CalculateTabLengths()
         {
@@ -1411,214 +1513,16 @@ namespace Rootech.UI.Component
         }
 
         /// <summary>
-        /// Invalidates and updates the <see cref="UserTabControl"/>.
+        /// Invalidates and updates the <see cref="CTablControl"/>.
         /// </summary>
         private void InU()
         {
             Invalidate();
             Update();
         }
+        #endregion
 
-        /// <summary>
-        /// Monitors when child <see cref="UserTabPage"/>s have their
-        /// <see cref="UserTabPage.Text"/> property changed.
-        /// </summary>
-        /// <param name="sender">A <see cref="UserTabPage"/>.</param>
-        /// <param name="ea">Some <see cref="EventArgs"/>.</param>
-        private void ChildTabTextChanged(object sender, EventArgs ea)
-        {
-            CalculateTabLengths();
-            InU();
-        }
-
-        /// <summary>
-        /// The index to use as the default image for the tabs.
-        /// </summary>
-        private int defaultImageIndex;
-
-        /// <summary>
-        /// The <see cref="ImageList"/> used to draw the images in
-        /// the tabs.
-        /// </summary>
-        private ImageList images;
-
-        /// <summary>
-        /// A flag to indicate if the tabs can scroll left.
-        /// </summary>
-        private bool canScrollLeft;
-
-        /// <summary>
-        /// A flag to indicate if the tabs can scroll right.
-        /// </summary>
-        private bool canScrollRight;
-
-        /// <summary>
-        /// A flag to indicate if scroll buttons should get drawn.
-        /// </summary>
-        private CTabScrollButtonStyle showScrollButton;
-
-        /// <summary>
-        /// The array of floats whose each entry measures a tab's width.
-        /// </summary>
-        private ArrayList tabLengths;
-
-        /// <summary>
-        /// The sum of the lengths of all the tabs.
-        /// </summary>
-        private float totalTabSpan;
-
-        /// <summary>
-        /// The margin around the visible <see cref="UserTabPage"/>.
-        /// </summary>
-        private int userTabMargin;
-
-        /// <summary>
-        /// The span of the tabs. Used as the height/width of the
-        /// tabs, depending on the orientation.
-        /// </summary>
-        private float tabSpan;
-
-        /// <summary>
-        /// The amount that the tabs have been scrolled to the left.
-        /// </summary>
-        private float tabLeftDif;
-
-        /// <summary>
-        /// The <see cref="Point"/>s that define the left scroll arrow.
-        /// </summary>
-        private Point[] leftArrow;
-
-        /// <summary>
-        /// The <see cref="Point"/>s that define the right scroll arrow.
-        /// </summary>
-        private Point[] rightArrow;
-
-        /// <summary>
-        /// The index of the last visible tab.
-        /// </summary>
-        private int lastVisibleTabIndex;
-
-        /// <summary>
-        /// The length from the left of the tab control
-        /// to the left of the last visible tab.
-        /// </summary>
-        private float lastVisibleTabLeft;
-
-        /// <summary>
-        /// The brush used to draw the strings in the tabs.
-        /// </summary>
-        private Brush foreBrush;
-        private Brush inactiveForeBrush;
-        private Color inactiveForeColor;
-        /// <summary>
-        /// The color of the active tab and area.
-        /// </summary>
-        private Color activeColor;
-
-        /// <summary>
-        /// The brush used to color the active-colored area.
-        /// </summary>
-        private Brush activeBrush;
-
-        /// <summary>
-        /// The color of the inactive areas.
-        /// </summary>
-        private Color inActiveColor;
-
-        /// <summary>
-        /// The brush used to color the inactive-colored area.
-        /// </summary>
-        private Brush inActiveBrush;
-
-        /// <summary>
-        /// The pen used to draw the highlight lines.
-        /// </summary>
-        private Pen highlightPen;
-
-        /// <summary>
-        /// The pen used to draw the shadow lines.
-        /// </summary>
-        private Pen shadowPen;
-
-        /// <summary>
-        /// The pen used to draw the border.
-        /// </summary>
-        private Pen borderPen;
-
-        /// <summary>
-        /// The index of the selected tab.
-        /// </summary>
-        private int selectedIndex;
-
-        /// <summary>
-        /// The currently selected tab.
-        /// </summary>
-        private CTabPage selectedTab;
-
-        /// <summary>
-        /// The side on which the tabs get docked.
-        /// </summary>
-        private DockStyle userTabDock;
-
-        /// <summary>
-        /// The rectangle in which the tabs get drawn.
-        /// </summary>
-        private Rectangle tabsRectangle;
-
-        /// <summary>
-        /// The rectangle in which the client gets drawn.
-        /// </summary>
-        private Rectangle clientRectangle;
-
-        /// <summary>
-        /// The rectangle in which the currently selected
-        /// <see cref="UserTabPage"/> gets drawn oriented as
-        /// if the tabs were docked to the top of the control.
-        /// </summary>
-        private Rectangle displayRectangle;
-
-        /// <summary>
-        /// The rectangle transformed for the <see cref="DisplayRectangle"/>
-        /// property to return.
-        /// </summary>
-        private Rectangle transformedDisplayRectangle;
-
-        /// <summary>
-        /// The height used to calculate the rectangles.
-        /// </summary>
-        private int calcHeight;
-
-        /// <summary>
-        /// The width used to calculate the rectangles.
-        /// </summary>
-        private int calcWidth;
-
-        /// <summary>
-        /// The regular font used to draw the strings in the tabs.
-        /// </summary>
-        private Font userTabFont;
-
-        /// <summary>
-        /// The bold font used to draw the strings in the active tab.
-        /// </summary>
-        private Font boldTabFont;
-
-        /// <summary>
-        /// The <see cref="UserTabRenderer"/> used to draw the
-        /// tabs.
-        /// </summary>
-        private CTabRenderer tabRenderer;
-
-        /// <summary>
-        /// Used to monitor the text changing of a <see cref="UserTabPage" />.
-        /// </summary>
-        private EventHandler ChildTextChangeEventHandler;
-
-        /// <summary>
-        /// Used to monitor if a person has elected to scroll the tabs.
-        /// </summary>
-        private bool keepScrolling;
-
+        #region "Code related to internal class"
         /// <summary>
         /// Let's the tabs scroll.
         /// </summary>
@@ -1626,7 +1530,7 @@ namespace Rootech.UI.Component
         {
             /// <summary>
             /// Creates a new instance of the
-            /// <see cref="UserTabControl.ScrollerThread"/> class.
+            /// <see cref="CTabControl.ScrollerThread"/> class.
             /// </summary>
             /// <param name="amount">The amount to scroll.</param>
             /// <param name="control">The control to scroll.</param>
@@ -1638,7 +1542,7 @@ namespace Rootech.UI.Component
             }
 
             /// <summary>
-            /// Scrolls the tabs on the <see cref="UserTabControl"/>
+            /// Scrolls the tabs on the <see cref="CTabControl"/>
             /// by the given amount.
             /// </summary>
             public void ScrollIt()
@@ -1681,63 +1585,63 @@ namespace Rootech.UI.Component
         }
 
         /// <summary>
-        /// A <see cref="UserTabControl"/>-specific
+        /// A <see cref="CTabControl"/>-specific
         /// <see cref="Control.ControlCollection"/>.
         /// </summary>
         public new class ControlCollection : Control.ControlCollection
         {
             /// <summary>
             /// Creates a new instance of the
-            /// <see cref="UserTabControl.ControlCollection"/> class with 
+            /// <see cref="CTabControl.ControlCollection"/> class with 
             /// the specified <i>owner</i>.
             /// </summary>
             /// <param name="owner">
-            /// The <see cref="UserTabControl"/> that owns this collection.
+            /// The <see cref="CTabControl"/> that owns this collection.
             /// </param>
             /// <exception cref="ArgumentNullException">
             /// Thrown if <i>owner</i> is <b>null</b>.
             /// </exception>
             /// <exception cref="ArgumentException">
-            /// Thrown if <i>owner</i> is not a <see cref="UserTabControl"/>.
+            /// Thrown if <i>owner</i> is not a <see cref="CTabControl"/>.
             /// </exception>
             public ControlCollection(Control owner) : base(owner)
             {
                 if (owner == null)
                 {
-                    throw new ArgumentNullException("owner", "Tried to create a UserTabControl.ControlCollection with a null owner.");
+                    throw new ArgumentNullException("owner", "Tried to create a CTabControl.ControlCollection with a null owner.");
                 }
                 this.owner = owner as CTabControl;
                 if (this.owner == null)
                 {
-                    throw new ArgumentException("Tried to create a UserTabControl.ControlCollection with a non-UserTabControl owner.", "owner");
+                    throw new ArgumentException("Tried to create a CTabControl.ControlCollection with a non-CTabControl owner.", "owner");
                 }
                 monitor = new EventHandler(this.owner.ChildTabTextChanged);
             }
 
             /// <summary>
             /// Overridden. Adds a <see cref="Control"/> to the
-            /// <see cref="UserTabControl"/>.
+            /// <see cref="CTabControl"/>.
             /// </summary>
             /// <param name="value">
             /// The <see cref="Control"/> to add, which must be a
-            /// <see cref="UserTabPage"/>.
+            /// <see cref="CTabPage"/>.
             /// </param>
             /// <exception cref="ArgumentNullException">
             /// Thrown if <i>value</i> is <b>null</b>.
             /// </exception>
             /// <exception cref="ArgumentException">
-            /// Thrown if <i>value</i> is not a <see cref="UserTabPage"/>.
+            /// Thrown if <i>value</i> is not a <see cref="CTabPage"/>.
             /// </exception>
             public override void Add(Control value)
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value", "Tried to add a null value to the UserTabControl.ControlCollection.");
+                    throw new ArgumentNullException("value", "Tried to add a null value to the CTabControl.ControlCollection.");
                 }
                 var p = value as CTabPage;
                 if (p == null)
                 {
-                    throw new ArgumentException("Tried to add a non-UserTabPage control to the UserTabControl.ControlCollection.", "value");
+                    throw new ArgumentException("Tried to add a non-CTabPage control to the CTabControl.ControlCollection.", "value");
                 }
                 p.SendToBack();
                 base.Add(p);
@@ -1767,13 +1671,13 @@ namespace Rootech.UI.Component
             }
 
             /// <summary>
-            /// The owner of this <see cref="UserTabControl.ControlCollection"/>.
+            /// The owner of this <see cref="CTabControl.ControlCollection"/>.
             /// </summary>
             private CTabControl owner;
 
             private EventHandler monitor;
         }
-
+        #endregion
 
     }
     public enum CTabScrollButtonStyle

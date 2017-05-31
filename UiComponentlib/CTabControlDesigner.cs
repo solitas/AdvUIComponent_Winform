@@ -9,44 +9,16 @@ namespace Rootech.UI.Component
 {
     public class CTabControlDesigner : ControlDesigner
     {
+        #region "Code related to constants fields"
         private const int WM_LBUTTONDOWN = 0x0201;
         private const int WM_LBUTTONDBCLICK = 0x0203;
+        private static int ControlNameNumber = 0;
+        #endregion
 
-
-        private static int ControlNameNumber;
         private CTabControl _tabControl;
         private DesignerVerbCollection _verbs;
-        public CTabControlDesigner()
-        {
-
-        }
-
-        public override void Initialize(IComponent component)
-        {
-            _tabControl = component as CTabControl;
-            if (_tabControl == null)
-            {
-                DisplayError(new ArgumentException("Tried to use the CTabControl with a class that does not inherit from UserTabControl.", "component"));
-            }    
-            base.Initialize(component);
-
-            IComponentChangeService compChangeServ = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-
-            if (compChangeServ != null)
-            {
-                compChangeServ.ComponentRemoved += new ComponentEventHandler(ComponentRemoved);
-            }
-        }
-
-        private void ComponentRemoved(object sender, ComponentEventArgs args)
-        {
-            if (args.Component == _tabControl.TabRenderer)
-            {
-                _tabControl.TabRenderer = null;
-                RaiseComponentChanging(TypeDescriptor.GetProperties(Control)["TabDrawer"]);
-                RaiseComponentChanged(TypeDescriptor.GetProperties(Control)["TabDrawer"], args.Component, null);
-            }
-        }
+        
+        #region "Code related to properties"
         public override DesignerVerbCollection Verbs
         {
             get
@@ -60,7 +32,38 @@ namespace Rootech.UI.Component
                 return _verbs;
             }
         }
+        #endregion
+        
+        // Constructor
+        public CTabControlDesigner()
+        {
 
+        }
+        
+        #region "Code related to override methods"
+        /// <summary>
+        /// Load the control designer with the component to design.
+        /// Set up the view on the control using the SetViewFlags method.
+        /// </summary>
+        /// <param name="component"></param>
+        public override void Initialize(IComponent component)
+        {
+            _tabControl = component as CTabControl;
+
+            if (_tabControl == null)
+            {
+                DisplayError(new ArgumentException("Tried to use the CTabControl with a class that does not inherit from UserTabControl.", "component"));
+            }
+
+            base.Initialize(component);
+            // TabPage 추가를 위한 Interface 에 이벤트를 등록한다
+            IComponentChangeService compChangeServ = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+
+            if (compChangeServ != null)
+            {
+                compChangeServ.ComponentRemoved += ComponentRemoved;
+            }
+        }
         protected override void WndProc(ref Message m)
         {
             try
@@ -119,31 +122,53 @@ namespace Rootech.UI.Component
                 base.WndProc(ref m);
             }
         }
+        #endregion
+        public override void DoDefaultAction() { }
+        /// <summary>
+        /// TabRenderer 제거를 처리
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void ComponentRemoved(object sender, ComponentEventArgs args)
+        {
+            if (args.Component == _tabControl.TabRenderer)
+            {
+                _tabControl.TabRenderer = null;
+
+                RaiseComponentChanging(TypeDescriptor.GetProperties(Control)["TabDrawer"]);
+                RaiseComponentChanged(TypeDescriptor.GetProperties(Control)["TabDrawer"], args.Component, null);
+            }
+        }
         private void AddTab(object sender, EventArgs args)
         {
-            IDesignerHost desingnerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
+            IDesignerHost designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
 
-            if (desingnerHost != null)
+            if (designerHost != null)
             {
-                int index = _tabControl.SelectedIndex;
+                int selectedIndex = _tabControl.SelectedIndex;
                 while (true)
                 {
                     try
                     {
-                        string name = GetNewTabName();
-                        var tabPage = desingnerHost.CreateComponent(typeof(CTabPage), name) as CTabPage;
-                        tabPage.Text = name;
+                       
+
+                        var tabName = GetNewTabName();
+                        var tabPage = designerHost.CreateComponent(typeof(CTabPage), tabName) as CTabPage;
+                        tabPage.Text = tabName;
                         _tabControl.Controls.Add(tabPage);
                         _tabControl.SelectedTab = tabPage;
+                        //designerHost.CreateComponent(typeof(CTabPage), "TabPage");
                         RaiseComponentChanging(TypeDescriptor.GetProperties(Control)["SelectedIndex"]);
-                        RaiseComponentChanged(TypeDescriptor.GetProperties(Control)["SelectedIndex"], index, _tabControl.SelectedIndex);
+                        RaiseComponentChanged(TypeDescriptor.GetProperties(Control)["SelectedIndex"], selectedIndex, _tabControl.SelectedIndex);
+
                         break;
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
         }
-
         private void RemoveTab(object sender, EventArgs args)
         {
             IDesignerHost designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -153,6 +178,8 @@ namespace Rootech.UI.Component
                 int index = _tabControl.SelectedIndex;
                 if (index > -1)
                 {
+                   
+
                     var tabPage = _tabControl.SelectedTab;
                     _tabControl.Controls.Remove(tabPage);
                     designerHost.DestroyComponent(tabPage);
@@ -161,7 +188,6 @@ namespace Rootech.UI.Component
                 }
             }
         }
-
         private string GetNewTabName()
         {
             ControlNameNumber += 1;

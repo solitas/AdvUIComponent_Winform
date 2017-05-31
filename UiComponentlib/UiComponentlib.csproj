@@ -51,6 +51,9 @@
     <Compile Include="CComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CCTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CLabel.cs">
       <SubType>Component</SubType>
     </Compile>

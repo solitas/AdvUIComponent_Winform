@@ -3,8 +3,16 @@ using System.Windows.Forms;
 
 namespace Rootech.UI.Component
 {
-    public class FlatTabRenderer : CTabRenderer
+    public class FlatTabRenderer : CTabRenderer, IControl
     {
+        #region "Code related to IControl Interface"
+        public int Depth { set; get; }
+
+        public MouseButtonState MouseButtonState { set; get; }
+
+        public ComponentVisualization Visualization { set; get; }
+        #endregion
+
         public override DockStyle[] SupportedTabDockStyles
         {
             get
@@ -20,26 +28,16 @@ namespace Rootech.UI.Component
                 return false;
             }
         }
+        public FlatTabRenderer()
+        {
+            Visualization = ComponentVisualization.Instance;
+        }
 
         public override void DrawTab(Color foreColor, Color backColor, Color highlightColor, Color shadowColor, Color borderColor, bool active, bool mouseOver, DockStyle dock, Graphics graphics, SizeF tabSize)
         {
             Rectangle headerRect = new Rectangle(0, 0, (int)tabSize.Width, (int)tabSize.Height);
-
-            if (active)
-            {
-                using (Brush brush = new SolidBrush(foreColor))
-                using (Pen pen = new Pen(borderColor))
-                {
-                    graphics.FillRectangle(brush, headerRect);
-                }
-            }
-            else
-            {
-                using (Brush brush = new SolidBrush(backColor))
-                {
-                    //graphics.FillRectangle(brush, new RectangleF(0, 0, tabSize.Width, tabSize.Height));
-                }
-            }
+            var brush = active ? Visualization.ColorScheme.LightPrimaryBrush : Visualization.ColorScheme.DarkPrimaryBrush;
+            graphics.FillRectangle(brush, headerRect);
         }
 
         public override bool SupportsTabDockStyle(DockStyle dock)

@@ -145,9 +145,8 @@ namespace Rootech.UI.Component
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
 
             // This enables the form to trigger the MouseMove event even when mouse is over another control
-            Application.AddMessageFilter(new MouseMessageFilter());
-            MouseMessageFilter.MouseMove += OnGlobalMouseMove;
-            //MouseMessageFilter.MouseDown += OnGlobalMouseDown;
+            //Application.AddMessageFilter(new MouseMessageFilter());
+            //MouseMessageFilter.MouseMove += OnGlobalMouseMove;
             var margin = this.DefaultMargin;
         }
 
@@ -159,7 +158,8 @@ namespace Rootech.UI.Component
             if (DesignMode || IsDisposed) return;
 
 
-            if (m.Msg == WM_LBUTTONDBLCLK)
+            if (m.Msg == WM_LBUTTONDBLCLK && (_titleBarBounds.Contains(PointToClient(Cursor.Position))) &&
+                !(_minButtonBounds.Contains(PointToClient(Cursor.Position)) || _maxButtonBounds.Contains(PointToClient(Cursor.Position)) || _xButtonBounds.Contains(PointToClient(Cursor.Position))))
             {
                 MaximizeWindow(!_maximized);
             }
@@ -256,7 +256,9 @@ namespace Rootech.UI.Component
         }
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (DesignMode) return;
+            if (DesignMode)
+                return;
+
             CheckButtonState(e);
 
             if (e.Button == MouseButtons.Left && !_maximized)
