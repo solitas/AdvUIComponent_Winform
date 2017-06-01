@@ -93,6 +93,8 @@ namespace Rootech.UI.Component
         public int right;
         public int bottom;
 
+        public int Left { get; internal set; }
+
         public int Width()
         {
             return right - left;

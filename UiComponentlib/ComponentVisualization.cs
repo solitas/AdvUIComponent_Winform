@@ -253,7 +253,7 @@ namespace Rootech.UI.Component
 
             Theme = Themes.LIGHT;
 
-            ColorScheme = new ColorScheme(Primary.Grey100, Primary.Grey900, Primary.Grey500, Accent.LightBlue700, TextShade.WHITE);
+            ColorScheme = new ColorScheme(Primary.Grey100, Primary.Grey300, Primary.Grey500, Accent.LightBlue700, TextShade.WHITE);
         }
         
         private FontFamily GetFontFamilyByResource(byte[] fontResource)

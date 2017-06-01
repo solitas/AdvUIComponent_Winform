@@ -544,16 +544,13 @@ namespace Rootech.UI.Component
 
             if (maximize)
             {
-                var monitorHandle = MonitorFromWindow(Handle, MONITOR_DEFAULTTONEAREST);
-                var monitorInfo = new MONITORINFOEX();
-                GetMonitorInfo(new HandleRef(null, monitorHandle), monitorInfo);
                 _previousSize = Size;
                 _previousLocation = Location;
-                Size = new Size(monitorInfo.rcWork.Width(), monitorInfo.rcWork.Height());
-                Location = new Point(monitorInfo.rcWork.left, monitorInfo.rcWork.top);
+                WindowState = FormWindowState.Maximized;
             }
             else
             {
+                WindowState = FormWindowState.Normal;
                 Size = _previousSize;
                 Location = _previousLocation;
             }
