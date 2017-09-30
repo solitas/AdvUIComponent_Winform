@@ -604,7 +604,7 @@ namespace Rootech.UI.Component
             {
                 if (MouseMove != null)
                 {
-                    int x = Control.MousePosition.X, y = Control.MousePosition.Y;
+                    int x = CTextBox.MousePosition.X, y = CTextBox.MousePosition.Y;
 
                     MouseMove(null, new MouseEventArgs(MouseButtons.None, 0, x, y, 0));
                 }
