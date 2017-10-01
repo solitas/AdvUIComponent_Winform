@@ -20,3 +20,4 @@ I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponent
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.csproj.GenerateResource.Cache
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.exe
 I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.pdb
+I:\workspace\Github\AdvUIComponent_Winform\UIComponentTest\obj\Debug\UIComponentTest.TestForm.resources

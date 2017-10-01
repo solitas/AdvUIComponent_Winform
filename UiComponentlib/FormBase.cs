@@ -35,9 +35,8 @@ namespace Rootech.UI.Component
         private ButtonState _buttonState = ButtonState.None;
         private ResizeDirection _resizeDir;
         // constants
-        private static int TITLE_BAR_HEIGHT = 24;
-        private static int FORM_PADDING = 14;
-        private static int TITLE_BAR_BUTTON_HEIGHT = 24;
+        private static int FORM_PADDING = ComponentVisualization.PADDING;
+        private static int TITLE_BAR_BUTTON_HEIGHT = ComponentVisualization.TITLE_BAR_HEIGHT;
 
         private const int BORDER_WIDTH = 7;
         private const int MONITOR_DEFAULTTONEAREST = 2;
@@ -99,6 +98,17 @@ namespace Rootech.UI.Component
         public MouseButtonState MouseButtonState { set; get; }
 
         public ComponentVisualization Visualization { set; get; }
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var par = base.CreateParams;
+                // WS_SYSMENU: Trigger the creation of the system menu
+                // WS_MINIMIZEBOX: Allow minimizing from taskbar
+                par.Style = par.Style | WS_MINIMIZEBOX | WS_SYSMENU; // Turn on the WS_MINIMIZEBOX style flag
+                return par;
+            }
+        }
 
         #region "Fileds related to appearance"
         public bool Sizable { get; set; }
@@ -122,30 +132,22 @@ namespace Rootech.UI.Component
             }
         }
         #endregion
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                var par = base.CreateParams;
-                // WS_SYSMENU: Trigger the creation of the system menu
-                // WS_MINIMIZEBOX: Allow minimizing from taskbar
-                par.Style = par.Style | WS_MINIMIZEBOX | WS_SYSMENU; // Turn on the WS_MINIMIZEBOX style flag
-                return par;
-            }
-        }
+
+
         // constructor
         public FormBase()
         {
-            Visualization = new ComponentVisualization();
+            Visualization = ComponentVisualization.Instance;
 
             this.FormBorderStyle = FormBorderStyle.None;
             DoubleBuffered = true;
             Sizable = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            // This enables the form to trigger the MouseMove event even when mouse is over another control
-            Application.AddMessageFilter(new MouseMessageFilter());
-            MouseMessageFilter.MouseMove += OnGlobalMouseMove;
 
+            // This enables the form to trigger the MouseMove event even when mouse is over another control
+            //Application.AddMessageFilter(new MouseMessageFilter());
+            //MouseMessageFilter.MouseMove += OnGlobalMouseMove;
+            var margin = this.DefaultMargin;
         }
 
         #region "code related to override methods"
@@ -156,7 +158,8 @@ namespace Rootech.UI.Component
             if (DesignMode || IsDisposed) return;
 
 
-            if (m.Msg == WM_LBUTTONDBLCLK)
+            if (m.Msg == WM_LBUTTONDBLCLK && (_titleBarBounds.Contains(PointToClient(Cursor.Position))) &&
+                !(_minButtonBounds.Contains(PointToClient(Cursor.Position)) || _maxButtonBounds.Contains(PointToClient(Cursor.Position)) || _xButtonBounds.Contains(PointToClient(Cursor.Position))))
             {
                 MaximizeWindow(!_maximized);
             }
@@ -241,10 +244,10 @@ namespace Rootech.UI.Component
             {
                 RecreateHandle();
             }
-            _titleBarBounds = new Rectangle(0, 0, this.Width, TITLE_BAR_HEIGHT);
-            _minButtonBounds = new Rectangle((Width - FORM_PADDING / 2) - 3 * TITLE_BAR_BUTTON_HEIGHT, 0, TITLE_BAR_BUTTON_HEIGHT, TITLE_BAR_HEIGHT);
-            _maxButtonBounds = new Rectangle((Width - FORM_PADDING / 2) - 2 * TITLE_BAR_BUTTON_HEIGHT, 0, TITLE_BAR_BUTTON_HEIGHT, TITLE_BAR_HEIGHT);
-            _xButtonBounds = new Rectangle((Width - FORM_PADDING / 2) - TITLE_BAR_BUTTON_HEIGHT, 0, TITLE_BAR_BUTTON_HEIGHT, TITLE_BAR_HEIGHT);
+            _titleBarBounds = new Rectangle(0, 0, this.Width, ComponentVisualization.TITLE_BAR_HEIGHT);
+            _minButtonBounds = new Rectangle((Width - FORM_PADDING / 2) - 3 * TITLE_BAR_BUTTON_HEIGHT, 0, TITLE_BAR_BUTTON_HEIGHT, ComponentVisualization.TITLE_BAR_HEIGHT);
+            _maxButtonBounds = new Rectangle((Width - FORM_PADDING / 2) - 2 * TITLE_BAR_BUTTON_HEIGHT, 0, TITLE_BAR_BUTTON_HEIGHT, ComponentVisualization.TITLE_BAR_HEIGHT);
+            _xButtonBounds = new Rectangle((Width - FORM_PADDING / 2) - TITLE_BAR_BUTTON_HEIGHT, 0, TITLE_BAR_BUTTON_HEIGHT, ComponentVisualization.TITLE_BAR_HEIGHT);
             _iconBounds = new Rectangle(3, 5, 30, 15);
             RedrawWindow(this.Handle, IntPtr.Zero, IntPtr.Zero, RedrawWindowFlag.Frame | RedrawWindowFlag.UpdateNow | RedrawWindowFlag.Invalidate);
 
@@ -253,7 +256,9 @@ namespace Rootech.UI.Component
         }
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (DesignMode) return;
+            if (DesignMode)
+                return;
+
             CheckButtonState(e);
 
             if (e.Button == MouseButtons.Left && !_maximized)
@@ -333,7 +338,13 @@ namespace Rootech.UI.Component
             var newE = new MouseEventArgs(MouseButtons.None, 0, clientCursorPos.X, clientCursorPos.Y, 0);
             OnMouseMove(newE);
         }
-
+        protected void OnGlobalMouseDown(object sender, MouseEventArgs e)
+        {
+            if (IsDisposed) return;
+            var clientCursorPos = PointToClient(e.Location);
+            var newE = new MouseEventArgs(MouseButtons.None, 0, clientCursorPos.X, clientCursorPos.Y, 0);
+            SendMessage(Handle, WM_LBUTTONDOWN, 0,0);
+        }
         protected override void OnControlAdded(ControlEventArgs e)
         {
             base.OnControlAdded(e);
@@ -350,10 +361,10 @@ namespace Rootech.UI.Component
             var g = e.Graphics;
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            g.Clear(ComponentVisualization.BACKGROUND_LIGHT);
+            g.Clear(Visualization.GetApplicationBackgroundColor());
             g.FillRectangle(Visualization.ColorScheme.DarkPrimaryBrush, _titleBarBounds);
             // draw border
-            using (var borderPen = new Pen(ComponentVisualization.DIVIDERS_WHITE, 1))
+            using (var borderPen = new Pen(Visualization.GetDividersColor(), 1))
             {
                 g.DrawLine(borderPen, new Point(0, _titleBarBounds.Bottom), new Point(0, Height - 2));
                 g.DrawLine(borderPen, new Point(Width - 1, _titleBarBounds.Bottom), new Point(Width - 1, Height - 2));
@@ -364,7 +375,7 @@ namespace Rootech.UI.Component
                 int margin = 3;
                 int x = margin;
                 int y = margin;
-                int iconSz = TITLE_BAR_HEIGHT - margin * 2;
+                int iconSz = ComponentVisualization.TITLE_BAR_HEIGHT - margin * 2;
                 g.DrawImage(Icon.ToBitmap(), new Rectangle(x, y, iconSz, iconSz));
             }
             PaintTitle(g);
@@ -385,16 +396,13 @@ namespace Rootech.UI.Component
             }
         }
 
-
-
         #region "Code related to draw form child controls"
         protected void PaintTitle(Graphics graphics)
         {
             var isShowMinimumButton = MinimizeBox && ControlBox;
             var isShowMaximumButton = MaximizeBox && ControlBox;
-
-            using (var hoveredBrush = new SolidBrush(ComponentVisualization.FLAT_BUTTON_BACKGROUND_HOVER_DARK))
-            using (var pressedBrush = new SolidBrush(ComponentVisualization.FLAT_BUTTON_BACKGROUND_PRESSED_DARK))
+            var hoveredBrush = Visualization.GetFlatButtonHoverBackgroundBrush();
+            var pressedBrush = Visualization.GetFlatButtonPressedBackgroundBrush();
             using (var xButtonHoverBrush = new SolidBrush(Color.FromArgb(150, 255, 0, 0)))
             {
                 if (isShowMinimumButton && _buttonState == ButtonState.MinOver)
@@ -536,16 +544,13 @@ namespace Rootech.UI.Component
 
             if (maximize)
             {
-                var monitorHandle = MonitorFromWindow(Handle, MONITOR_DEFAULTTONEAREST);
-                var monitorInfo = new MONITORINFOEX();
-                GetMonitorInfo(new HandleRef(null, monitorHandle), monitorInfo);
                 _previousSize = Size;
                 _previousLocation = Location;
-                Size = new Size(monitorInfo.rcWork.Width(), monitorInfo.rcWork.Height());
-                Location = new Point(monitorInfo.rcWork.left, monitorInfo.rcWork.top);
+                WindowState = FormWindowState.Maximized;
             }
             else
             {
+                WindowState = FormWindowState.Normal;
                 Size = _previousSize;
                 Location = _previousLocation;
             }
@@ -580,7 +585,6 @@ namespace Rootech.UI.Component
                 SendMessage(Handle, WM_NCLBUTTONDOWN, dir, 0);
             }
         }
-
         private void ResizeIconImage(Image image)
         {
             var width = image.Width;
@@ -596,6 +600,7 @@ namespace Rootech.UI.Component
         private const int WM_MOUSEMOVE = 0x0200;
 
         public static event MouseEventHandler MouseMove;
+        public static event MouseEventHandler MouseDown;
 
         public bool PreFilterMessage(ref Message m)
         {
@@ -608,6 +613,11 @@ namespace Rootech.UI.Component
 
                     MouseMove(null, new MouseEventArgs(MouseButtons.None, 0, x, y, 0));
                 }
+            }
+            else if (m.Msg == WM_LBUTTONDOWN)
+            {
+                int x = Control.MousePosition.X, y = Control.MousePosition.Y;
+                MouseDown?.Invoke(null, new MouseEventArgs(MouseButtons.None, 0, x, y, 0));
             }
             return false;
         }

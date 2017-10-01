@@ -5,7 +5,7 @@ namespace Rootech.UI.Component
 {
     public class ColorScheme
     {
-        public readonly Color PrimaryColor, DarkPrimaryColor, LightPrimaryColor, AccentColor, TextColor;
+        public readonly Color PrimaryColor, DarkPrimaryColor, LightPrimaryColor, AccentColor, TextColor, WhiteColor;
         public readonly Pen PrimaryPen, DarkPrimaryPen, LightPrimaryPen, AccentPen, TextPen;
         public readonly Brush PrimaryBrush, DarkPrimaryBrush, LightPrimaryBrush, AccentBrush, TextBrush;
 
@@ -25,7 +25,7 @@ namespace Rootech.UI.Component
             LightPrimaryColor = ((int)lightPrimary).ToColor();
             AccentColor = ((int)accent).ToColor();
             TextColor = ((int)textShade).ToColor();
-
+            WhiteColor = Color.White;
             //Pen
             PrimaryPen = new Pen(PrimaryColor);
             DarkPrimaryPen = new Pen(DarkPrimaryColor);
